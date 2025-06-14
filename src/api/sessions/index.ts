@@ -1,10 +1,10 @@
 
 import { supabase } from "@/integrations/supabase/client";
 
-// Use "job_cards" to represent sessions for now
+// Use "sessions" for booking PT/class sessions
 export async function bookSession(payload: any) {
   const { data, error } = await supabase
-    .from("job_cards")
+    .from("sessions")
     .insert([payload])
     .select()
     .single();

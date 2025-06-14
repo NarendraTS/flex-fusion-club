@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -22,10 +23,11 @@ const InventoryAlerts = () => {
     fetchLowStockItems();
 
     // Set up real-time subscription
+    // Note: You may need to enable realtime if not set yet
     const channel = supabase
       .channel('inventory-alerts')
       .on('postgres_changes', 
-        { event: '*', schema: 'public', table: 'inventory' },
+        { event: '*', schema: 'public', table: 'equipment' },
         () => fetchLowStockItems()
       )
       .subscribe();
@@ -37,27 +39,25 @@ const InventoryAlerts = () => {
 
   const fetchLowStockItems = async () => {
     try {
-      // First get all inventory items, then filter in JavaScript to avoid SQL type issues
       const { data, error } = await supabase
-        .from('inventory')
-        .select('id, item_name, quantity, min_stock_level')
-        .order('item_name');
+        .from('equipment')
+        .select('id, name, quantity, min_stock_level')
+        .order('name');
 
       if (error) {
-        console.error('Error fetching inventory items:', error);
+        console.error('Error fetching equipment:', error);
         return;
       }
 
-      // Filter items where quantity is less than or equal to min_stock_level
       const lowStockData = data?.filter(item => 
-        item.quantity <= item.min_stock_level
+        (item.quantity ?? 0) <= (item.min_stock_level ?? 0)
       ) || [];
 
       const formattedItems = lowStockData.map(item => ({
         id: item.id,
-        name: item.item_name,
-        current_stock: item.quantity,
-        minimum_stock: item.min_stock_level
+        name: item.name,
+        current_stock: item.quantity ?? 0,
+        minimum_stock: item.min_stock_level ?? 0
       }));
 
       setLowStockItems(formattedItems);

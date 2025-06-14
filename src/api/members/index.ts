@@ -1,10 +1,10 @@
 
 import { supabase } from "@/integrations/supabase/client";
 
-// Use "staff" as a temporary stand-in for "members"
+// Use "members"
 export async function createMember(form: any) {
   const { data, error } = await supabase
-    .from("staff")
+    .from("members")
     .insert([form])
     .select()
     .single();

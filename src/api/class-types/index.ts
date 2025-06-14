@@ -1,12 +1,12 @@
 
 import { supabase } from "@/integrations/supabase/client";
 
-// Use "garage_services" instead of "class_types"
-export async function getClassTypes(branch_id: string) {
+// Use "classes" instead of "garage_services" or "class_types"
+export async function getClassTypes(gym_id: string) {
   const { data, error } = await supabase
-    .from("garage_services")
+    .from("classes")
     .select("*")
-    .eq("garage_id", branch_id); // note: mapping branch_id→garage_id
+    .eq("gym_id", gym_id);
   if (error) throw error;
   return data;
 }

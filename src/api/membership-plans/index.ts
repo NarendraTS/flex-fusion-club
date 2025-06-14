@@ -1,15 +1,14 @@
 
 import { supabase } from "@/integrations/supabase/client";
 
-// Use a table that exists; comment out if not present
-export async function getMembershipPlans() {
-  // const { data, error } = await supabase
-  //   .from("membership_plans")
-  //   .select("*")
-  //   .order("price");
-  // if (error) throw error;
-  // return data;
-
-  // Dummy for now
-  return [];
+// Use "membership_plans"
+export async function getMembershipPlans(gym_id?: string) {
+  const query = supabase
+    .from("membership_plans")
+    .select("*")
+    .order("price");
+  if (gym_id) query.eq("gym_id", gym_id);
+  const { data, error } = await query;
+  if (error) throw error;
+  return data;
 }
