@@ -1,5 +1,5 @@
 
-import { supabase } from "@/lib/supabaseClient";
+import { supabase } from "@/integrations/supabase/client";
 
 export async function getBranchTrainers(branch_id: string) {
   const { data, error } = await supabase

@@ -1,5 +1,5 @@
 
-import { supabase } from "@/lib/supabaseClient";
+import { supabase } from "@/integrations/supabase/client";
 
 export async function recordAttendance({ member_id, branch_id }: { member_id: string, branch_id: string }) {
   const { data, error } = await supabase
