@@ -1,10 +1,11 @@
 
 import { supabase } from "@/integrations/supabase/client";
 
+// Use "attendance" instead of "member_attendance"
 export async function recordAttendance({ member_id, branch_id }: { member_id: string, branch_id: string }) {
   const { data, error } = await supabase
-    .from("member_attendance")
-    .insert([{ member_id, branch_id, timestamp: new Date() }])
+    .from("attendance")
+    .insert([{ staff_id: member_id, garage_id: branch_id, clock_in: new Date().toISOString() }]) // mapped fields
     .select()
     .single();
   if (error) throw error;
